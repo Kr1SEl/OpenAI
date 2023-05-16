@@ -14,15 +14,15 @@ def parse_image_text(chat_id):
     return pytesseract.image_to_string(Image.open(f"photos/{chat_id}.jpg"))
 
 
-def ask_openAI(question):
-    response = openai.Completion.create(
-        model="text-davinci-003",
-        prompt=question,
-        max_tokens=2000,
-        temperature=0
+def ask_openAI(question, model):
+    response = openai.ChatCompletion.create(
+        # model="gpt-3.5-turbo",
+        model=f"{model}",
+        messages=[{"role": "user", "content": f"{question}"}]
     )
-    out = f"``` {substitute_string(question)} ```\n{substitute_string(response['choices'][0]['text'])}\n"
-    print(out)
+    out = f"```{substitute_string(question)}```\n{substitute_string(response.choices[0].message.content)}\n"
+    # print(out)
+    # out = f'{response.choices[0].message.content}'
     return out
 
 
